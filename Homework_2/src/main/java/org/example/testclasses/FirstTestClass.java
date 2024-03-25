@@ -1,4 +1,4 @@
-package org.example.testClasses;
+package org.example.testclasses;
 
 import org.example.annotation.*;
 
@@ -11,6 +11,11 @@ public class FirstTestClass {
     @Test(priority = 3)
     public void secondTestMethod(){
         System.out.println("Was tested");
+    }
+
+    @Test(priority = 5)
+    public void badTestMethod(){
+        throw new ArithmeticException();
     }
 
     @Test

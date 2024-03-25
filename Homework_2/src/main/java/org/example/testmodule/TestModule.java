@@ -1,4 +1,4 @@
-package org.example.testModule;
+package org.example.testmodule;
 
 import org.example.annotation.*;
 
@@ -8,10 +8,14 @@ import java.util.Arrays;
 import java.util.Comparator;
 
 public class TestModule {
-    public static void StartAllTests(Class<?> testingClass) throws NoSuchMethodException, InvocationTargetException, InstantiationException, IllegalAccessException {
+    private static int testPassed;
+    private static int testFailed;
+    public static void startAllTests(Class<?> testingClass) throws NoSuchMethodException, InvocationTargetException, InstantiationException, IllegalAccessException {
         if (testingClass.isAnnotationPresent(Disabled.class)){
             return;
         }
+        testPassed = 0;
+        testFailed = 0;
         Object testObject = testingClass.getDeclaredConstructor().newInstance();
         var methods = testingClass.getDeclaredMethods();
 
@@ -45,6 +49,7 @@ public class TestModule {
         var afterTest = getBeforeTest(methods, AfterSuite.class);
         invokeMethods(afterTest, testingClass.getSimpleName(), testObject, "Start testing: ");
         System.out.println("----------------");
+        System.out.printf("Статистика: \nТестов пройдено: %d\nТестов провалено: %d", testPassed, testFailed);
     }
 
     private static void invokeMethodsByPriority(Class<?> testingClass, Method[] mainMethods, Object testObject, Method[] beforeMethods, Method[] afterMethods) {
@@ -61,33 +66,43 @@ public class TestModule {
                         else{
                             System.out.println("Start testing: "+ testingClass.getSimpleName() + " " + m.getName());
                             m.invoke(testObject);
+                            testPassed++;
                         }
 
                         invokeMethods(afterMethods, testingClass.getSimpleName(), testObject, "Start after: ");
 
-                    } catch (IllegalAccessException | InvocationTargetException e) {
-                        throw new RuntimeException(e);
+                    } catch (Exception e) {
+                        testFailed++;
                     }
                 });
     }
 
-    private static void checkException(Object testObject, Method m) throws IllegalAccessException {
+    private static void checkException(Object testObject, Method m){
         try {
             m.invoke(testObject);
         } catch (InvocationTargetException e){
             Throwable thrownException = e.getTargetException();
             if (!m.getAnnotation(ThrowsException.class).exception().isInstance(thrownException)){
                 System.out.println("Test failed: method " + m.getName() + " threw an exception " + thrownException.getClass().getName() + " instead of expected " + m.getName());
+                testFailed++;
             } else{
                 System.out.println("Test passes: method " + m.getName() + " threw an exception " + thrownException.getClass().getName());
+                testPassed++;
             }
+        } catch (Exception e){
+            testFailed++;
         }
     }
 
-    private static void invokeMethods(Method[] beforeTest, String testingClass, Object testObject, String startMessage) throws IllegalAccessException, InvocationTargetException {
+    private static void invokeMethods(Method[] beforeTest, String testingClass, Object testObject, String startMessage){
         for (var test : beforeTest) {
             System.out.println(startMessage + testingClass + " " + test.getName());
-            test.invoke(testObject);
+            try {
+                test.invoke(testObject);
+                testPassed++;
+            } catch (Exception e) {
+                testFailed++;
+            }
         }
     }
 
