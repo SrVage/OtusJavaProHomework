@@ -8,14 +8,11 @@ import java.util.Arrays;
 import java.util.Comparator;
 
 public class TestModule {
-    private static int testPassed;
-    private static int testFailed;
     public static void startAllTests(Class<?> testingClass) throws NoSuchMethodException, InvocationTargetException, InstantiationException, IllegalAccessException {
         if (testingClass.isAnnotationPresent(Disabled.class)){
             return;
         }
-        testPassed = 0;
-        testFailed = 0;
+        TestResult testResult = new TestResult();
         Object testObject = testingClass.getDeclaredConstructor().newInstance();
         var methods = testingClass.getDeclaredMethods();
 
@@ -24,7 +21,7 @@ public class TestModule {
                 toArray(Method[]::new);
 
         var beforeTest = getBeforeTest(methods, BeforeSuite.class);
-        invokeMethods(beforeTest, testingClass.getSimpleName(), testObject, "Start testing: ");
+        invokeMethods(beforeTest, testingClass.getSimpleName(), testObject, "Start testing: ", testResult);
         System.out.println("----------------");
 
         Method[] testingMethods = Arrays.stream(methods)
@@ -43,65 +40,76 @@ public class TestModule {
                 .filter(method -> method.isAnnotationPresent(After.class))
                 .toArray(Method[]::new);
 
-        invokeMethodsByPriority(testingClass, mainTestingMethods, testObject, beforeEachTestMethods, afterEachTestMethods);
+        invokeMethodsByPriority(testingClass, mainTestingMethods, testObject, beforeEachTestMethods, afterEachTestMethods, testResult);
         System.out.println("----------------");
 
         var afterTest = getBeforeTest(methods, AfterSuite.class);
-        invokeMethods(afterTest, testingClass.getSimpleName(), testObject, "Start testing: ");
+        invokeMethods(afterTest, testingClass.getSimpleName(), testObject, "Start testing: ", testResult);
         System.out.println("----------------");
-        System.out.printf("Статистика: \nТестов пройдено: %d\nТестов провалено: %d", testPassed, testFailed);
+        testResult.printResult();
     }
 
-    private static void invokeMethodsByPriority(Class<?> testingClass, Method[] mainMethods, Object testObject, Method[] beforeMethods, Method[] afterMethods) {
+    private static void invokeMethodsByPriority(Class<?> testingClass,
+                                                Method[] mainMethods,
+                                                Object testObject,
+                                                Method[] beforeMethods,
+                                                Method[] afterMethods,
+                                                TestResult testResult) {
         Arrays.stream(mainMethods).
                 sorted(Comparator.comparingInt(c-> (-1)*c.getAnnotation(Test.class).priority()))
                 .forEach(m-> {
                     try {
                         System.out.println();
-                        invokeMethods(beforeMethods, testingClass.getSimpleName(), testObject, "Start before: ");
+                        invokeMethods(beforeMethods, testingClass.getSimpleName(), testObject, "Start before: ", testResult);
 
                         if (m.isAnnotationPresent(ThrowsException.class)){
-                            checkException(testObject, m);
+                            checkException(testObject, m, testResult);
                         }
                         else{
                             System.out.println("Start testing: "+ testingClass.getSimpleName() + " " + m.getName());
                             m.invoke(testObject);
-                            testPassed++;
+                            testResult.passTest();
                         }
 
-                        invokeMethods(afterMethods, testingClass.getSimpleName(), testObject, "Start after: ");
+                        invokeMethods(afterMethods, testingClass.getSimpleName(), testObject, "Start after: ", testResult);
 
                     } catch (Exception e) {
-                        testFailed++;
+                        testResult.failTest();
                     }
                 });
     }
 
-    private static void checkException(Object testObject, Method m){
+    private static void checkException(Object testObject,
+                                       Method method,
+                                       TestResult testResult){
         try {
-            m.invoke(testObject);
+            method.invoke(testObject);
         } catch (InvocationTargetException e){
             Throwable thrownException = e.getTargetException();
-            if (!m.getAnnotation(ThrowsException.class).exception().isInstance(thrownException)){
-                System.out.println("Test failed: method " + m.getName() + " threw an exception " + thrownException.getClass().getName() + " instead of expected " + m.getName());
-                testFailed++;
+            if (!method.getAnnotation(ThrowsException.class).exception().isInstance(thrownException)){
+                System.out.println("Test failed: method " + method.getName() + " threw an exception " + thrownException.getClass().getName() + " instead of expected " + method.getName());
+                testResult.failTest();
             } else{
-                System.out.println("Test passes: method " + m.getName() + " threw an exception " + thrownException.getClass().getName());
-                testPassed++;
+                System.out.println("Test passes: method " + method.getName() + " threw an exception " + thrownException.getClass().getName());
+                testResult.passTest();
             }
         } catch (Exception e){
-            testFailed++;
+            testResult.failTest();
         }
     }
 
-    private static void invokeMethods(Method[] beforeTest, String testingClass, Object testObject, String startMessage){
+    private static void invokeMethods(Method[] beforeTest,
+                                      String testingClass,
+                                      Object testObject,
+                                      String startMessage,
+                                      TestResult testResult){
         for (var test : beforeTest) {
             System.out.println(startMessage + testingClass + " " + test.getName());
             try {
                 test.invoke(testObject);
-                testPassed++;
+                testResult.passTest();
             } catch (Exception e) {
-                testFailed++;
+                testResult.failTest();
             }
         }
     }
