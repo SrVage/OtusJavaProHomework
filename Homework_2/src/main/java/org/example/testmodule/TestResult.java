@@ -5,7 +5,7 @@ public class TestResult {
     private int testFailed;
 
     public void printResult(){
-        System.out.printf("Статистика: \nТестов пройдено: %d\nТестов провалено: %d", testPassed, testFailed);
+        System.out.printf("Статистика: %nТестов пройдено: %d%nТестов провалено: %d", testPassed, testFailed);
     }
 
     public void passTest(){
