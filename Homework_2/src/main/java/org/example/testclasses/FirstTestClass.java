@@ -2,15 +2,17 @@ package org.example.testclasses;
 
 import org.example.annotation.*;
 
+import java.util.logging.Logger;
+
 public class FirstTestClass {
     @Test(priority = 7)
     public void firstTestMethod(){
-        System.out.println("Was tested");
+        Logger.getLogger(FirstTestClass.class.getName()).info("Was tested");
     }
 
     @Test(priority = 3)
     public void secondTestMethod(){
-        System.out.println("Was tested");
+        Logger.getLogger(FirstTestClass.class.getName()).info("Was tested");
     }
 
     @Test(priority = 5)
@@ -21,32 +23,32 @@ public class FirstTestClass {
     @Test
     @Disabled
     public void disabledTestMethod(){
-        System.out.println("Was tested");
+        Logger.getLogger(FirstTestClass.class.getName()).info("Was tested");
     }
 
     @Test
     @Before
     public void beforeEachTestMethod(){
-        System.out.println("Was tested");
+        Logger.getLogger(FirstTestClass.class.getName()).info("Was tested");
     }
     @Test
     @After
     public void afterEachTestMethod(){
-        System.out.println("Was tested");
+        Logger.getLogger(FirstTestClass.class.getName()).info("Was tested");
     }
 
     @BeforeSuite
     public void beforeTestMethod(){
-        System.out.println("Was tested");
+        Logger.getLogger(FirstTestClass.class.getName()).info("Was tested");
     }
 
     @AfterSuite
     public void afterTestMethod(){
-        System.out.println("Was tested");
+        Logger.getLogger(FirstTestClass.class.getName()).info("Was tested");
     }
 
     public void noTestMethod(){
-        System.out.println("No tested");
+        Logger.getLogger(FirstTestClass.class.getName()).info("Was tested");
     }
 
     @Test

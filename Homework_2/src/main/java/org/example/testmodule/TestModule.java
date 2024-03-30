@@ -6,6 +6,7 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.Arrays;
 import java.util.Comparator;
+import java.util.logging.Logger;
 
 public class TestModule {
     public static void startAllTests(Class<?> testingClass) throws NoSuchMethodException, InvocationTargetException, InstantiationException, IllegalAccessException {
@@ -41,11 +42,11 @@ public class TestModule {
                 .toArray(Method[]::new);
 
         invokeMethodsByPriority(testingClass, mainTestingMethods, testObject, beforeEachTestMethods, afterEachTestMethods, testResult);
-        System.out.println("----------------");
+        Logger.getLogger(TestModule.class.getName()).info("----------------");
 
         var afterTest = getBeforeTest(methods, AfterSuite.class);
         invokeMethods(afterTest, testingClass.getSimpleName(), testObject, "Start testing: ", testResult);
-        System.out.println("----------------");
+        Logger.getLogger(TestModule.class.getName()).info("----------------");
         testResult.printResult();
     }
 
@@ -59,14 +60,14 @@ public class TestModule {
                 sorted(Comparator.comparingInt(c-> (-1)*c.getAnnotation(Test.class).priority()))
                 .forEach(m-> {
                     try {
-                        System.out.println();
+                        Logger.getLogger(TestModule.class.getName()).info("");
                         invokeMethods(beforeMethods, testingClass.getSimpleName(), testObject, "Start before: ", testResult);
 
                         if (m.isAnnotationPresent(ThrowsException.class)){
                             checkException(testObject, m, testResult);
                         }
                         else{
-                            System.out.println("Start testing: "+ testingClass.getSimpleName() + " " + m.getName());
+                            Logger.getLogger(TestModule.class.getName()).info(String.format("Start testing: "+ testingClass.getSimpleName() + " " + m.getName()));
                             m.invoke(testObject);
                             testResult.passTest();
                         }
@@ -87,10 +88,12 @@ public class TestModule {
         } catch (InvocationTargetException e){
             Throwable thrownException = e.getTargetException();
             if (!method.getAnnotation(ThrowsException.class).exception().isInstance(thrownException)){
-                System.out.println("Test failed: method " + method.getName() + " threw an exception " + thrownException.getClass().getName() + " instead of expected " + method.getName());
+                Logger.getLogger(TestModule.class.getName()).
+                        info(String.format("Test failed: method " + method.getName() + " threw an exception " + thrownException.getClass().getName() + " instead of expected " + method.getName()));
                 testResult.failTest();
             } else{
-                System.out.println("Test passes: method " + method.getName() + " threw an exception " + thrownException.getClass().getName());
+                Logger.getLogger(TestModule.class.getName()).
+                        info(String.format("Test passes: method " + method.getName() + " threw an exception " + thrownException.getClass().getName()));
                 testResult.passTest();
             }
         } catch (Exception e){
@@ -104,7 +107,8 @@ public class TestModule {
                                       String startMessage,
                                       TestResult testResult){
         for (var test : beforeTest) {
-            System.out.println(startMessage + testingClass + " " + test.getName());
+            Logger.getLogger(TestModule.class.getName()).
+                    info(String.format(startMessage + testingClass + " " + test.getName()));
             try {
                 test.invoke(testObject);
                 testResult.passTest();
@@ -119,7 +123,8 @@ public class TestModule {
                 .filter(method -> method.isAnnotationPresent(annotation))
                 .toArray(Method[]::new);
         if (tests.length > 1){
-            System.out.println("Несколько аннотаций " +annotation.getSimpleName()+ " в одном классе");
+            Logger.getLogger(TestModule.class.getName()).
+                    info(String.format("Несколько аннотаций " +annotation.getSimpleName()+ " в одном классе"));
             return new Method[0];
         }
         return tests;
