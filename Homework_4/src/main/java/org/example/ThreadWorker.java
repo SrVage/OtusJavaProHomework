@@ -1,12 +1,13 @@
 package org.example;
 
+import java.util.Deque;
 import java.util.LinkedList;
 
 public class ThreadWorker extends Thread {
-    private final LinkedList<Runnable> tasks;
+    private final Deque<Runnable> tasks;
     private boolean isStopped;
 
-    public ThreadWorker(LinkedList<Runnable> tasks) {
+    public ThreadWorker(Deque<Runnable> tasks) {
         this.tasks = tasks;
     }
 
