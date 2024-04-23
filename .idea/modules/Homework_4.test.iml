@@ -7,7 +7,7 @@
       <sourceFolder url="file://$MODULE_DIR$/../../Homework_4/src/test/java" isTestSource="true" />
       <sourceFolder url="file://$MODULE_DIR$/../../Homework_4/src/test/resources" type="java-test-resource" />
     </content>
-    <orderEntry type="jdk" jdkName="openjdk-21" jdkType="JavaSDK" />
+    <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="module" module-name="Homework_4.main" />
     <orderEntry type="library" name="Gradle: org.junit.jupiter:junit-jupiter:5.10.0" level="project" />
