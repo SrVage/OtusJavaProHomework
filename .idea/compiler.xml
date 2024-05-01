@@ -14,6 +14,9 @@
       <module name="Homework_5" target="21" />
       <module name="Homework_5.main" target="21" />
       <module name="Homework_5.test" target="21" />
+      <module name="Homework_6" target="21" />
+      <module name="Homework_6.main" target="21" />
+      <module name="Homework_6.test" target="21" />
     </bytecodeTargetLevel>
   </component>
 </project>
