@@ -1,15 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<module external.linked.project.id="Homework_4:test" external.linked.project.path="$MODULE_DIR$/../../Homework_4" external.root.project.path="$MODULE_DIR$/../../Homework_4" external.system.id="GRADLE" external.system.module.group="org.example" external.system.module.type="sourceSet" external.system.module.version="1.0-SNAPSHOT" type="JAVA_MODULE" version="4">
+<module external.linked.project.id="Homework_5:test" external.linked.project.path="$MODULE_DIR$/../../Homework_5" external.root.project.path="$MODULE_DIR$/../../Homework_5" external.system.id="GRADLE" external.system.module.group="org.example" external.system.module.type="sourceSet" external.system.module.version="1.0-SNAPSHOT" type="JAVA_MODULE" version="4">
   <component name="NewModuleRootManager" LANGUAGE_LEVEL="JDK_21">
-    <output-test url="file://$MODULE_DIR$/../../Homework_4/build/classes/java/test" />
+    <output-test url="file://$MODULE_DIR$/../../Homework_5/build/classes/java/test" />
     <exclude-output />
-    <content url="file://$MODULE_DIR$/../../Homework_4/src/test">
-      <sourceFolder url="file://$MODULE_DIR$/../../Homework_4/src/test/java" isTestSource="true" />
-      <sourceFolder url="file://$MODULE_DIR$/../../Homework_4/src/test/resources" type="java-test-resource" />
+    <content url="file://$MODULE_DIR$/../../Homework_5/src/test">
+      <sourceFolder url="file://$MODULE_DIR$/../../Homework_5/src/test/java" isTestSource="true" />
+      <sourceFolder url="file://$MODULE_DIR$/../../Homework_5/src/test/resources" type="java-test-resource" />
     </content>
-    <orderEntry type="inheritedJdk" />
+    <orderEntry type="jdk" jdkName="openjdk-21" jdkType="JavaSDK" />
     <orderEntry type="sourceFolder" forTests="false" />
-    <orderEntry type="module" module-name="Homework_4.main" />
+    <orderEntry type="module" module-name="Homework_5.main" />
     <orderEntry type="library" name="Gradle: org.junit.jupiter:junit-jupiter:5.10.0" level="project" />
     <orderEntry type="library" name="Gradle: org.junit.jupiter:junit-jupiter-params:5.10.0" level="project" />
     <orderEntry type="library" name="Gradle: org.junit.jupiter:junit-jupiter-api:5.10.0" level="project" />
@@ -19,5 +19,5 @@
     <orderEntry type="library" scope="RUNTIME" name="Gradle: org.junit.jupiter:junit-jupiter-engine:5.10.0" level="project" />
     <orderEntry type="library" scope="RUNTIME" name="Gradle: org.junit.platform:junit-platform-engine:1.10.0" level="project" />
   </component>
-  <component name="TestModuleProperties" production-module="Homework_4.main" />
+  <component name="TestModuleProperties" production-module="Homework_5.main" />
 </module>
