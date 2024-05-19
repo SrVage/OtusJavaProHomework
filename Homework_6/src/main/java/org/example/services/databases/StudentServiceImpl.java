@@ -1,7 +1,7 @@
 package org.example.services.databases;
 
 public class StudentServiceImpl implements StudentService {
-    private final String createTableQuery = "CREATE TABLE Student (" +
+    private static final String createTableQuery = "CREATE TABLE Student (" +
             "id INT AUTO_INCREMENT PRIMARY KEY," +
             "Name VARCHAR(255)," +
             "Course VARCHAR(255)" +

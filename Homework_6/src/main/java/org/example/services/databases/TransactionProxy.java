@@ -8,9 +8,9 @@ import java.util.logging.Logger;
 public class TransactionProxy implements Transaction {
     private final Transaction transaction;
     private Connection connection;
-    private final String url = "jdbc:h2:mem:testdb";
-    private final String user = "sa";
-    private final String pass = "";
+    private static final String url = "jdbc:h2:mem:testdb";
+    private static final String user = "sa";
+    private static final String pass = "";
     private final Logger logger = Logger.getLogger(TransactionProxy.class.getSimpleName());
 
     public TransactionProxy(Transaction transaction) {
