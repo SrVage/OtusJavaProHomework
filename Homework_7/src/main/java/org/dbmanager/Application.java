@@ -1,4 +1,11 @@
-package org.example;
+package org.dbmanager;
+
+import org.dbmanager.entity.Account;
+import org.dbmanager.entity.User;
+import org.dbmanager.service.AbstractRepository;
+import org.dbmanager.service.DataSource;
+import org.dbmanager.service.DbMigrator;
+import org.dbmanager.service.RepositoryFactory;
 
 import java.util.List;
 import java.util.logging.Logger;
@@ -15,7 +22,7 @@ public class Application {
 
     public static void main(String[] args) {
         DataSource dataSource = null;
-        Logger logger = Logger.getLogger(Application.class.getSimpleName());
+        Logger logger = Logger.getLogger(Application.class.getName());
         try {
             dataSource = new DataSource("jdbc:h2:file:./db;MODE=PostgreSQL");
             dataSource.connect();

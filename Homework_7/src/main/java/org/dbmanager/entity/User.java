@@ -1,4 +1,8 @@
-package org.example;
+package org.dbmanager.entity;
+
+import org.dbmanager.annotation.RepositoryField;
+import org.dbmanager.annotation.RepositoryIdField;
+import org.dbmanager.annotation.RepositoryTable;
 
 @RepositoryTable(title = "users")
 public class User {

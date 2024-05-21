@@ -1,4 +1,4 @@
-package org.example.exceptions;
+package org.dbmanager.exceptions;
 
 public class ApplicationInitializationException extends RuntimeException{
 }

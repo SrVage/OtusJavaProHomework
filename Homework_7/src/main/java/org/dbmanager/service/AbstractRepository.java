@@ -1,4 +1,8 @@
-package org.example;
+package org.dbmanager.service;
+
+import org.dbmanager.annotation.RepositoryField;
+import org.dbmanager.annotation.RepositoryIdField;
+import org.dbmanager.helper.DeclaredField;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
@@ -20,6 +24,7 @@ public class AbstractRepository<T> {
     private final List<Field> cachedSetFields;
     private final Method getId;
     private final Class<T> cls;
+    private final Map<Field, DeclaredField> fieldMap;
 
     public AbstractRepository(
             Class<T> cls,
@@ -30,8 +35,8 @@ public class AbstractRepository<T> {
             PreparedStatement psDeleteById,
             PreparedStatement psDeleteAll,
             List<Field> cachedGetFields,
-            List<Field> cachedSetFields
-    ) throws NoSuchMethodException {
+            List<Field> cachedSetFields,
+            Map<Field, DeclaredField> fieldMap) throws NoSuchMethodException {
         this.cls = cls;
         this.psCreate = psCreate;
         this.psSelect = psSelect;
@@ -41,13 +46,14 @@ public class AbstractRepository<T> {
         this.psDeleteAll = psDeleteAll;
         this.cachedGetFields = cachedGetFields;
         this.cachedSetFields = cachedSetFields;
+        this.fieldMap = fieldMap;
         getId = prepareIdField();
     }
 
     public void create(T entity) {
         try {
             for (int i = 0; i < cachedGetFields.size(); i++) {
-                var method = cls.getMethod("get"+ cachedGetFields.get(i).getName().substring(0,1).toUpperCase()+ cachedGetFields.get(i).getName().trim().substring(1));
+                var method = fieldMap.get(cachedGetFields.get(i)).getMethod;
                 psCreate.setObject(i + 1, method.invoke(entity));
             }
             psCreate.executeUpdate();
@@ -63,14 +69,7 @@ public class AbstractRepository<T> {
                 Constructor<T> constructor = cls.getDeclaredConstructor();
                 var obj = constructor.newInstance();
                 for (var field : cachedSetFields){
-                    var method = cls.getMethod("set"+field.getName().substring(0,1).toUpperCase()+field.getName().trim().substring(1), field.getType());
-                    var columnName = field.getAnnotation(RepositoryField.class).column();
-                    if (field.getType() == Long.class || field.getType() == long.class){
-                        method.invoke(obj, rs.getLong(columnName.isEmpty() ? field.getName() : columnName));
-                    }
-                    else{
-                        method.invoke(obj, rs.getString(columnName.isEmpty() ? field.getName() : columnName));
-                    }
+                    fieldMap.get(field).invokeSet(rs, obj);
                 }
                 out.add(obj);
             }

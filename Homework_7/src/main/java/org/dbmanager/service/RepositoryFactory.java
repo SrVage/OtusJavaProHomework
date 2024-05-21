@@ -1,13 +1,19 @@
-package org.example;
+package org.dbmanager.service;
 
-import org.example.exceptions.ApplicationInitializationException;
+import org.dbmanager.annotation.RepositoryField;
+import org.dbmanager.annotation.RepositoryIdField;
+import org.dbmanager.annotation.RepositoryTable;
+import org.dbmanager.exceptions.ApplicationInitializationException;
+import org.dbmanager.helper.DeclaredField;
 
 import java.lang.reflect.Field;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 public class RepositoryFactory {
@@ -23,6 +29,16 @@ public class RepositoryFactory {
             List<Field> cachedSetFields = Arrays.stream(cls.getDeclaredFields())
                     .filter(f -> f.isAnnotationPresent(RepositoryField.class))
                     .collect(Collectors.toList());
+
+            Map<Field, DeclaredField> fieldMap = new HashMap<>();
+            cachedSetFields.forEach(item->{
+                try {
+                    DeclaredField declaredField = new DeclaredField(item, cls);
+                    fieldMap.put(item, declaredField);
+                } catch (NoSuchMethodException e) {
+                    e.printStackTrace();
+                }
+            });
 
             String tableName = cls.getAnnotation(RepositoryTable.class).title();
 
@@ -53,7 +69,8 @@ public class RepositoryFactory {
                     psDeleteById,
                     psDeleteAll,
                     cachedGetFields,
-                    cachedSetFields
+                    cachedSetFields,
+                    fieldMap
             );
 
         } catch (SQLException e) {

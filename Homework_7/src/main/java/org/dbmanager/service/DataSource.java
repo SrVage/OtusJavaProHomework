@@ -1,6 +1,6 @@
-package org.example;
+package org.dbmanager.service;
 
-import org.example.exceptions.ApplicationInitializationException;
+import org.dbmanager.exceptions.ApplicationInitializationException;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
