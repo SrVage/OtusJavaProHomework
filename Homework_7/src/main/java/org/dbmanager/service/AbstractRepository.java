@@ -87,14 +87,7 @@ public class AbstractRepository<T> {
                 Constructor<T> constructor = cls.getDeclaredConstructor();
                 var obj = constructor.newInstance();
                 for (var field : cachedSetFields){
-                    var method = cls.getMethod("set"+field.getName().substring(0,1).toUpperCase()+field.getName().trim().substring(1), field.getType());
-                    var columnName = field.getAnnotation(RepositoryField.class).column();
-                    if (field.getType() == Long.class || field.getType() == long.class){
-                        method.invoke(obj, rs.getLong(columnName.isEmpty() ? field.getName() : columnName));
-                    }
-                    else{
-                        method.invoke(obj, rs.getString(columnName.isEmpty() ? field.getName() : columnName));
-                    }
+                    fieldMap.get(field).invokeSet(rs, obj);
                 }
                 return Optional.of(obj);
             }
@@ -107,14 +100,12 @@ public class AbstractRepository<T> {
     public void update(T entity){
         try {
             for (int i = 0; i < cachedGetFields.size(); i++) {
-                var method = cls.getMethod("get" +
-                        cachedGetFields.get(i).getName().substring(0, 1).toUpperCase() +
-                        cachedGetFields.get(i).getName().trim().substring(1));
+                var method = fieldMap.get(cachedGetFields.get(i)).getMethod;
                 psUpdate.setObject(i + 1, method.invoke(entity));
             }
             psUpdate.setObject(cachedGetFields.size() + 1, getId.invoke(entity));
             psUpdate.executeUpdate();
-        } catch (SQLException | InvocationTargetException | IllegalAccessException | NoSuchMethodException e) {
+        } catch (SQLException | InvocationTargetException | IllegalAccessException e) {
             e.printStackTrace();
         }
     }
@@ -142,7 +133,7 @@ public class AbstractRepository<T> {
                 .filter(f -> f.isAnnotationPresent(RepositoryIdField.class))
                 .findFirst().orElse(null);
         if (idField != null) {
-            return cls.getMethod("get" + idField.getName().substring(0, 1).toUpperCase() + idField.getName().substring(1));
+            return fieldMap.get(idField).getMethod;
         } else {
             throw new NoSuchMethodException("ID field not found");
         }
