@@ -31,13 +31,9 @@ public class RepositoryFactory {
                     .collect(Collectors.toList());
 
             Map<Field, DeclaredField> fieldMap = new HashMap<>();
-            cachedSetFields.forEach(item->{
-                try {
-                    DeclaredField declaredField = new DeclaredField(item, cls);
-                    fieldMap.put(item, declaredField);
-                } catch (NoSuchMethodException e) {
-                    e.printStackTrace();
-                }
+            cachedSetFields.forEach(item -> {
+                DeclaredField declaredField = new DeclaredField(item, cls);
+                fieldMap.put(item, declaredField);
             });
 
             String tableName = cls.getAnnotation(RepositoryTable.class).title();
@@ -73,11 +69,9 @@ public class RepositoryFactory {
                     fieldMap
             );
 
-        } catch (SQLException e) {
+        } catch (SQLException | NoSuchMethodException e) {
             e.printStackTrace();
             throw new ApplicationInitializationException();
-        } catch (NoSuchMethodException e) {
-            throw new RuntimeException(e);
         }
     }
 
