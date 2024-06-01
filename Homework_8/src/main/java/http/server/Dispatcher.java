@@ -4,10 +4,7 @@ import http.server.application.processors.CalculatorRequestProcessor;
 import http.server.application.processors.CreateNewProductProcessor;
 import http.server.application.processors.GetAllProductsProcessor;
 import http.server.application.processors.HelloWorldRequestProcessor;
-import http.server.processors.DefaultOptionsProcessor;
-import http.server.processors.DefaultStaticResourcesProcessor;
-import http.server.processors.DefaultUnknownOperationProcessor;
-import http.server.processors.RequestProcessor;
+import http.server.processors.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import java.io.IOException;
@@ -20,6 +17,7 @@ import java.util.Map;
 public class Dispatcher {
     private Map<String, RequestProcessor> router;
     private RequestProcessor unknownOperationRequestProcessor;
+    private MethodNotAllowedOperationProcessor methodNotAllowedOperationProcessor;
     private RequestProcessor optionsRequestProcessor;
     private RequestProcessor staticResourcesProcessor;
 
@@ -35,6 +33,7 @@ public class Dispatcher {
         this.unknownOperationRequestProcessor = new DefaultUnknownOperationProcessor();
         this.optionsRequestProcessor = new DefaultOptionsProcessor();
         this.staticResourcesProcessor = new DefaultStaticResourcesProcessor();
+        this.methodNotAllowedOperationProcessor = new MethodNotAllowedOperationProcessor();
 
         logger.info("Диспетчер проинициализирован");
     }
@@ -44,12 +43,12 @@ public class Dispatcher {
             optionsRequestProcessor.execute(httpRequest, outputStream);
             return;
         }
-        if (Files.exists(Paths.get("static/", httpRequest.getUri().substring(1)))) {
+        if (Files.exists(Paths.get("Homework_8/static/", httpRequest.getUri().substring(1)))) {
             staticResourcesProcessor.execute(httpRequest, outputStream);
             return;
         }
         if (!router.containsKey(httpRequest.getRouteKey())) {
-            unknownOperationRequestProcessor.execute(httpRequest, outputStream);
+            methodNotAllowedOperationProcessor.execute(httpRequest, outputStream, router.keySet());
             return;
         }
         router.get(httpRequest.getRouteKey()).execute(httpRequest, outputStream);

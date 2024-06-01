@@ -6,6 +6,7 @@ import org.slf4j.LoggerFactory;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 public class HttpRequest {
@@ -13,7 +14,9 @@ public class HttpRequest {
     private String uri;
     private HttpMethod method;
     private Map<String, String> parameters;
+    private Map<String, String> headers;
     private String body;
+    private String sessionID;
 
     private static final Logger logger = LoggerFactory.getLogger(HttpRequest.class.getName());
 
@@ -37,13 +40,27 @@ public class HttpRequest {
         return method;
     }
 
+    public String getHeader(String header) { return headers.get(header); }
+
     public HttpRequest(String rawRequest) {
         this.rawRequest = rawRequest;
         this.parseRequestLine();
         this.tryToParseBody();
+        this.getHeaders();
+        this.getSessionId();
 
-        logger.debug("\n{}", rawRequest);
+        logger.debug("\nSessionID: {}\n{}", sessionID, rawRequest);
         logger.trace("{} {}\nParameters: {}\nBody: {}", method, uri, parameters, body); // TODO правильно все поназывать
+    }
+
+    private void getSessionId() {
+        var cookie = getHeader("Cookie");
+        var session = cookie.substring(cookie.indexOf("SESSIONID=")+"SESSIONID=".length());
+        if (session.isEmpty()){
+            session = UUID.randomUUID().toString();
+        }
+        sessionID = session;
+        headers.put("Set-Cookie", sessionID);
     }
 
     public void tryToParseBody() {
@@ -79,6 +96,20 @@ public class HttpRequest {
             for (String o : keysValues) {
                 String[] keyValue = o.split("=");
                 this.parameters.put(keyValue[0], keyValue[1]);
+            }
+        }
+    }
+
+    private void getHeaders() {
+        this.headers = new HashMap<>();
+        var lines = rawRequest.split("\n");
+        for (int i = 1; i < lines.length; i++) {
+            if (lines[i].isEmpty()){
+                break;
+            }
+            String[] headerParts = lines[i].split(":", 2);
+            if (headerParts.length>1){
+                headers.put(headerParts[0], headerParts[1]);
             }
         }
     }
