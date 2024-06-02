@@ -55,9 +55,11 @@ public class HttpRequest {
 
     private void getSessionId() {
         var cookie = getHeader("Cookie");
-        var session = cookie.substring(cookie.indexOf("SESSIONID=")+"SESSIONID=".length());
-        if (session.isEmpty()){
+        String session;
+        if (cookie == null || cookie.isEmpty()){
             session = UUID.randomUUID().toString();
+        } else {
+            session = cookie.substring(cookie.indexOf("SESSIONID=")+"SESSIONID=".length());
         }
         sessionID = session;
         headers.put("Set-Cookie", sessionID);
@@ -107,7 +109,7 @@ public class HttpRequest {
             if (lines[i].isEmpty()){
                 break;
             }
-            String[] headerParts = lines[i].split(":", 2);
+            String[] headerParts = lines[i].split(": ", 2);
             if (headerParts.length>1){
                 headers.put(headerParts[0], headerParts[1]);
             }

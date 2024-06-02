@@ -26,7 +26,8 @@ public class HttpServer {
 
     public void start() {
         executorService = Executors.newFixedThreadPool(4);
-        requestBuffer = new ThreadLocal<>();
+        //requestBuffer = new ThreadLocal<>();
+        requestBuffer = ThreadLocal.withInitial(() -> new byte[DEFAULT_BUFFER_SIZE]);
         try (ServerSocket serverSocket = new ServerSocket(port)) {
             logger.info("Сервер запущен на порту: {}", port);
             this.dispatcher = new Dispatcher();
@@ -44,9 +45,9 @@ public class HttpServer {
 
     private void executeRequest(Socket socket) {
         try {
-            if (requestBuffer.get() == null) {
+            /*if (requestBuffer.get() == null) {
                 requestBuffer.set(new byte[DEFAULT_BUFFER_SIZE]);
-            }
+            }*/
             byte[] buffer = requestBuffer.get();
             int n = socket.getInputStream().read(buffer);
             if (n > 0) {
