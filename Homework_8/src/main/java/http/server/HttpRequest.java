@@ -58,11 +58,46 @@ public class HttpRequest {
         String session;
         if (cookie == null || cookie.isEmpty()){
             session = UUID.randomUUID().toString();
+            sessionID = session;
+            session+="SESSIONID="+session+";";
         } else {
-            session = cookie.substring(cookie.indexOf("SESSIONID=")+"SESSIONID=".length());
+            var cookieParams = parseCookie(cookie);
+            var sessionKey = cookieParams.keySet().stream()
+                    .filter(item->item.toUpperCase().contains("SESSIONID"))
+                    .findFirst().orElse("SESSIONID");
+            var sessionId = cookieParams.getOrDefault(sessionKey, "");
+            if (sessionId.isEmpty()){
+                sessionId = UUID.randomUUID().toString();
+                cookieParams.put(sessionKey, sessionId);
+            }
+            sessionID = sessionId;
+            session = cookieToString(cookieParams);
         }
-        sessionID = session;
+        headers.put("Cookie", session);
         headers.put("Set-Cookie", sessionID);
+    }
+
+    private HashMap<String, String> parseCookie(String cookie) {
+        HashMap<String, String> cookieParams = new HashMap<>();
+        var cookies = cookie.split("; ");
+        for (var param : cookies){
+            var splitParams = param.split("=");
+            if (splitParams.length>1){
+                cookieParams.put(splitParams[0], splitParams[1]);
+            }
+        }
+        return cookieParams;
+    }
+
+    private String cookieToString(HashMap<String, String> cookieMap){
+        StringBuilder builder = new StringBuilder();
+        for (var cookie:cookieMap.entrySet()){
+            builder.append(cookie.getKey())
+                    .append("=")
+                    .append(cookie.getValue())
+                    .append("; ");
+        }
+        return builder.toString();
     }
 
     public void tryToParseBody() {
