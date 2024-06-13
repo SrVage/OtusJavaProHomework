@@ -19,19 +19,19 @@ public class Customer {
 
     private String name;
 
-    @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-    @JoinTable(name = "customer_to_book",
-            joinColumns = @JoinColumn(name = "customer_id"),
-            inverseJoinColumns = @JoinColumn(name = "product_id"))
-    private Set<Product> products;
+    @OneToMany(mappedBy = "customer", fetch = FetchType.EAGER)
+    private Set<Purchase> purchases;
 
     @Override
     public String toString() {
         StringBuilder builder = new StringBuilder();
-        products.forEach(product->{
-            builder.append(product.getTitle());
+        purchases.forEach(purchase->{
+            builder.append(purchase.getProduct().getTitle());
             builder.append("-");
-            builder.append(product.getPrice());
+            builder.append(purchase.getProduct().getPrice());
+            builder.append("\t");
+            builder.append("цена на момент покупки - ");
+            builder.append(purchase.getPriceAtPurchase());
             builder.append("\n");
         });
         return "Customer{" +

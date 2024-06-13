@@ -20,14 +20,14 @@ public class Product {
 
     private double price;
 
-    @ManyToMany(cascade = CascadeType.ALL, mappedBy = "products", fetch = FetchType.EAGER)
-    private Set<Customer> customers;
+    @OneToMany(mappedBy = "product", fetch = FetchType.EAGER)
+    private Set<Purchase> purchases;
 
     @Override
     public String toString() {
         StringBuilder builder = new StringBuilder();
-        customers.forEach(customer->{
-            builder.append(customer.getName());
+        purchases.forEach(purchase->{
+            builder.append(purchase.getCustomer().getName());
             builder.append("\n");
         });
         return "Product{" +

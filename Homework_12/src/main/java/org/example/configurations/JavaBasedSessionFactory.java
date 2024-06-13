@@ -4,6 +4,7 @@ import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import org.example.entities.Customer;
 import org.example.entities.Product;
+import org.example.entities.Purchase;
 import org.hibernate.SessionFactory;
 import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
 import org.hibernate.cfg.Configuration;
@@ -22,6 +23,7 @@ public class JavaBasedSessionFactory {
 
         configuration.addAnnotatedClass(Customer.class);
         configuration.addAnnotatedClass(Product.class);
+        configuration.addAnnotatedClass(Purchase.class);
 
         ServiceRegistry serviceRegistry = new StandardServiceRegistryBuilder()
                 .applySettings(configuration.getProperties())
