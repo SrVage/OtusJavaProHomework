@@ -1,5 +1,6 @@
 package org.example.services;
 
+import org.example.Messages;
 import org.example.entities.Customer;
 import org.example.entities.Product;
 import org.example.util.EntityUtil;
@@ -18,11 +19,11 @@ public class CustomerService extends EntityService<Customer>{
     public void addNew(BufferedReader reader){
         try{
         Customer customer = new Customer();
-        logger.info("Введите имя покупателя: ");
+        logger.info(Messages.INPUT_CUSTOMER_NAME.toString());
         customer.setName(reader.readLine());
         var products = new HashSet<Product>();
         while (true){
-            logger.info("Введите id товара или ! для завершения");
+            logger.info(Messages.INPUT_PRODUCT_ID.toString());
             var str = reader.readLine();
             if (str.equals("!")){
                 break;

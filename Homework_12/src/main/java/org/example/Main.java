@@ -10,13 +10,9 @@ import org.example.services.ProductService;
 import org.hibernate.SessionFactory;
 
 import java.io.BufferedReader;
-import java.io.IOException;
 import java.io.InputStreamReader;
-import java.util.logging.Logger;
 
 public class Main {
-    private final static Logger logger = Logger.getLogger(Main.class.getName());
-
     public static void main(String[] args) {
         try(SessionFactory sessionFactory = JavaBasedSessionFactory.getSessionFactory()){
             EntityService<Customer> customerService = new CustomerService(sessionFactory);

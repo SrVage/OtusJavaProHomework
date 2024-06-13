@@ -1,6 +1,7 @@
 package org.example.services;
 
 import lombok.RequiredArgsConstructor;
+import org.example.Messages;
 import org.example.entities.Customer;
 import org.example.entities.Product;
 
@@ -18,16 +19,8 @@ public class InputService {
     public void start(){
         try{
             while (true){
-                logger.info("0 - Выход;\n" +
-                        "1 - Создание нового товара;\n" +
-                        "2 - Вывести все товары;\n" +
-                        "3 - Создание нового пользователя.\n" +
-                        "4 - Показать всех пользователей.\n" +
-                        "5 - Найти все товары пользователя.\n" +
-                        "6 - Найти всех пользователей товара.\n" +
-                        "7 - Удалить пользователя.\n" +
-                        "8 - Удалить товар");
-                logger.info("Выберите действие:");
+                logger.info(Messages.HELLO_MESSAGE.toString());
+                logger.info(Messages.CHOOSE_ACTION.toString());
                 int input = Integer.parseInt(reader.readLine());
                 if (input == 0) {
                     break;
@@ -48,7 +41,7 @@ public class InputService {
                 } else if (input == 8) {
                     productService.deleteById(Long.parseLong(reader.readLine()));
                 } else{
-                    logger.warning("Неверная операция");
+                    logger.warning(Messages.BAD_OPERATION.toString());
                 }
             }
         } catch (IOException e) {

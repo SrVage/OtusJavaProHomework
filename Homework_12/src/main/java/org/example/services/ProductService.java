@@ -1,5 +1,6 @@
 package org.example.services;
 
+import org.example.Messages;
 import org.example.entities.Product;
 import org.example.util.EntityUtil;
 import org.hibernate.SessionFactory;
@@ -16,9 +17,9 @@ public class ProductService extends EntityService<Product>{
     public void addNew(BufferedReader reader) {
         try {
             Product product = new Product();
-            logger.info("Введите название товара: ");
+            logger.info(Messages.INPUT_PRODUCT_TITLE.toString());
             product.setTitle(reader.readLine());
-            logger.info("Введите стоимость товара: ");
+            logger.info(Messages.INPUT_PRODUCT_COST.toString());
             product.setPrice(Double.parseDouble(reader.readLine()));
             EntityUtil.insert(sessionFactory, product);
         } catch (IOException e) {

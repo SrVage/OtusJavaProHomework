@@ -1,7 +1,6 @@
 package org.example.services;
 
 import lombok.RequiredArgsConstructor;
-import org.example.entities.Customer;
 import org.example.util.EntityUtil;
 import org.hibernate.SessionFactory;
 
