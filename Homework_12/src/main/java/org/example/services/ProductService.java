@@ -8,7 +8,7 @@ import org.hibernate.SessionFactory;
 import java.io.BufferedReader;
 import java.io.IOException;
 
-public class ProductService extends EntityService<Product>{
+public class ProductService extends EntityService<Product> {
     public ProductService(SessionFactory sessionFactory) {
         super(sessionFactory, Product.class);
     }

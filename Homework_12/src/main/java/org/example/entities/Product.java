@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+
 import java.util.Set;
 
 @Getter
@@ -26,15 +27,22 @@ public class Product {
     @Override
     public String toString() {
         StringBuilder builder = new StringBuilder();
-        purchases.forEach(purchase->{
-            builder.append(purchase.getCustomer().getName());
-            builder.append("\n");
+        purchases.forEach(purchase -> {
+            builder.append(purchase.getCustomer().getName())
+                    .append("\n");
         });
-        return "Product{" +
-                "id=" + id +
-                ", title='" + title + '\'' +
-                ", price=" + price +
-                ", customers=" + builder.toString() +
-                '}';
+        return new StringBuilder()
+                .append("Product{")
+                .append("id=")
+                .append(id)
+                .append(", title='")
+                .append(title)
+                .append('\'')
+                .append(", price=")
+                .append(price)
+                .append(", customers=")
+                .append(builder.toString())
+                .append('}')
+                .toString();
     }
 }

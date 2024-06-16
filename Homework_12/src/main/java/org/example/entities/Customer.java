@@ -25,19 +25,25 @@ public class Customer {
     @Override
     public String toString() {
         StringBuilder builder = new StringBuilder();
-        purchases.forEach(purchase->{
-            builder.append(purchase.getProduct().getTitle());
-            builder.append("-");
-            builder.append(purchase.getProduct().getPrice());
-            builder.append("\t");
-            builder.append("цена на момент покупки - ");
-            builder.append(purchase.getPriceAtPurchase());
-            builder.append("\n");
+        purchases.forEach(purchase -> {
+            builder.append(purchase.getProduct().getTitle())
+                    .append("-")
+                    .append(purchase.getProduct().getPrice())
+                    .append("\t")
+                    .append("цена на момент покупки - ")
+                    .append(purchase.getPriceAtPurchase())
+                    .append("\n");
         });
-        return "Customer{" +
-                "id=" + id +
-                ", name='" + name + '\'' +
-                ", products=" + builder.toString() +
-                '}';
+        return new StringBuilder()
+                .append("Customer{")
+                .append("id=")
+                .append(id)
+                .append(", name='")
+                .append(name)
+                .append('\'')
+                .append(", products=")
+                .append(builder.toString())
+                .append('}')
+                .toString();
     }
 }

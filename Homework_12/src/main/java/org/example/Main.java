@@ -14,7 +14,7 @@ import java.io.InputStreamReader;
 
 public class Main {
     public static void main(String[] args) {
-        try(SessionFactory sessionFactory = JavaBasedSessionFactory.getSessionFactory()){
+        try (SessionFactory sessionFactory = JavaBasedSessionFactory.getSessionFactory()) {
             EntityService<Customer> customerService = new CustomerService(sessionFactory);
             EntityService<Product> productService = new ProductService(sessionFactory);
             BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));

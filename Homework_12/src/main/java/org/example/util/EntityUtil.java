@@ -6,6 +6,11 @@ import org.hibernate.SessionFactory;
 import java.util.List;
 
 public class EntityUtil {
+
+    private EntityUtil() {
+        throw new UnsupportedOperationException("Utility class");
+    }
+
     public static <T> T insert(SessionFactory sessionFactory, T entity) {
         try (Session session = sessionFactory.getCurrentSession()) {
             session.beginTransaction();
@@ -17,7 +22,7 @@ public class EntityUtil {
         }
     }
 
-    public static <T> T findById(SessionFactory sessionFactory, Class<T> cls, long id){
+    public static <T> T findById(SessionFactory sessionFactory, Class<T> cls, long id) {
         try (Session session = sessionFactory.getCurrentSession()) {
             session.beginTransaction();
 
@@ -33,7 +38,7 @@ public class EntityUtil {
         }
     }
 
-    public static <T> void deleteById(SessionFactory sessionFactory, Class<T> cls, long id){
+    public static <T> void deleteById(SessionFactory sessionFactory, Class<T> cls, long id) {
         try (Session session = sessionFactory.getCurrentSession()) {
             session.beginTransaction();
 

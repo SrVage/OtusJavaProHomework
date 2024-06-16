@@ -19,11 +19,10 @@ public class JavaBasedSessionFactory {
         Configuration configuration = new Configuration();
         Properties properties = getProperties();
 
-        configuration.setProperties(properties);
-
-        configuration.addAnnotatedClass(Customer.class);
-        configuration.addAnnotatedClass(Product.class);
-        configuration.addAnnotatedClass(Purchase.class);
+        configuration.setProperties(properties)
+                .addAnnotatedClass(Customer.class)
+                .addAnnotatedClass(Product.class)
+                .addAnnotatedClass(Purchase.class);
 
         ServiceRegistry serviceRegistry = new StandardServiceRegistryBuilder()
                 .applySettings(configuration.getProperties())
@@ -40,7 +39,6 @@ public class JavaBasedSessionFactory {
         properties.put("hibernate.connection.url", "jdbc:h2:~/test");
         properties.put("hibernate.connection.username", "sa");
         properties.put("hibernate.connection.password", "");
-        //properties.put("hibernate.dialect", "org.hibernate.dialect.H2Dialect");
         properties.put("hibernate.hbm2ddl.auto", "create");
         properties.put("hibernate.show_sql", "true");
         properties.put("hibernate.format_sql", "true");

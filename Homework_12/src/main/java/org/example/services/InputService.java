@@ -16,32 +16,42 @@ public class InputService {
     private final EntityService<Product> productService;
     private final BufferedReader reader;
 
-    public void start(){
-        try{
-            while (true){
+    public void start() {
+        try {
+            while (true) {
                 logger.info(Messages.HELLO_MESSAGE.toString());
                 logger.info(Messages.CHOOSE_ACTION.toString());
                 int input = Integer.parseInt(reader.readLine());
-                if (input == 0) {
-                    break;
-                } else if(input == 1){
-                    productService.addNew(reader);
-                } else if (input == 2) {
-                    productService.printAll();
-                } else if (input == 3) {
-                    customerService.addNew(reader);
-                } else if (input == 4) {
-                    customerService.printAll();
-                } else if (input == 5){
-                    customerService.printById(Long.parseLong(reader.readLine()));
-                } else if (input == 6) {
-                    productService.printById(Long.parseLong(reader.readLine()));
-                } else if (input == 7){
-                    customerService.deleteById(Long.parseLong(reader.readLine()));
-                } else if (input == 8) {
-                    productService.deleteById(Long.parseLong(reader.readLine()));
-                } else{
-                    logger.warning(Messages.BAD_OPERATION.toString());
+                switch (input) {
+                    case 0:
+                        return;
+                    case 1:
+                        productService.addNew(reader);
+                        break;
+                    case 2:
+                        productService.printAll();
+                        break;
+                    case 3:
+                        customerService.addNew(reader);
+                        break;
+                    case 4:
+                        customerService.printAll();
+                        break;
+                    case 5:
+                        customerService.printById(Long.parseLong(reader.readLine()));
+                        break;
+                    case 6:
+                        productService.printById(Long.parseLong(reader.readLine()));
+                        break;
+                    case 7:
+                        customerService.deleteById(Long.parseLong(reader.readLine()));
+                        break;
+                    case 8:
+                        productService.deleteById(Long.parseLong(reader.readLine()));
+                        break;
+                    default:
+                        logger.warning(Messages.BAD_OPERATION.toString());
+                        break;
                 }
             }
         } catch (IOException e) {
