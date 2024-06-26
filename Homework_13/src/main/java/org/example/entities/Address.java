@@ -12,5 +12,10 @@ import lombok.Setter;
 @Table(name = "addresses")
 public class Address {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id", updatable = false, nullable = false)
+    private Long id;
+
+    @Column(name = "street", nullable = false)
     private String street;
 }

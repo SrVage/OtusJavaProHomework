@@ -42,6 +42,11 @@ public class EntityUtil {
         try (Session session = sessionFactory.getCurrentSession()) {
             session.beginTransaction();
 
+            var entity = session.get(cls, id);
+            if (entity == null){
+                session.getTransaction().commit();
+                return;
+            }
             session.remove(session.get(cls, id));
             session.getTransaction().commit();
         }

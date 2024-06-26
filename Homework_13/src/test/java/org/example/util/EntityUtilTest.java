@@ -1,23 +1,28 @@
-package org.example;
+package org.example.util;
+
 
 import org.example.configurations.JavaBasedSessionFactory;
 import org.example.entities.Address;
 import org.example.entities.Client;
 import org.example.entities.Phone;
-import org.example.util.EntityUtil;
 import org.hibernate.SessionFactory;
+import org.junit.jupiter.api.Test;
+import static org.junit.jupiter.api.Assertions.*;
+
 
 import java.util.Set;
 
-
-public class Main {
-    public static void main(String[] args) {
+public class EntityUtilTest {
+    @Test
+    void testAddClient(){
         try (SessionFactory sessionFactory = JavaBasedSessionFactory.getSessionFactory()) {
+            int startCount = EntityUtil.findAll(sessionFactory, Client.class).size();
             var client = createClient("Watson",
                     "+79998881122",
                     "Baker street");
 
             EntityUtil.insert(sessionFactory, client);
+            assertEquals(startCount+1, EntityUtil.findAll(sessionFactory, Client.class).size());
         }
     }
 

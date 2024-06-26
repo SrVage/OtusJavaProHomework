@@ -14,8 +14,12 @@ import java.util.Properties;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class JavaBasedSessionFactory {
+    private static SessionFactory sessionFactory;
 
     public static SessionFactory getSessionFactory() {
+        if (sessionFactory != null) {
+            return sessionFactory;
+        }
         Configuration configuration = new Configuration();
         Properties properties = getProperties();
 
@@ -28,8 +32,8 @@ public class JavaBasedSessionFactory {
                 .applySettings(configuration.getProperties())
                 .build();
 
-
-        return configuration.buildSessionFactory(serviceRegistry);
+        sessionFactory = configuration.buildSessionFactory(serviceRegistry);
+        return sessionFactory;
     }
 
     private static Properties getProperties() {
