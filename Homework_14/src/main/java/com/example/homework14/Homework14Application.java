@@ -1,4 +1,4 @@
-package com.example.Homework_14;
+package com.example.homework14;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

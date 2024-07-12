@@ -1,4 +1,4 @@
-package com.example.Homework_14.dto;
+package com.example.homework14.dto;
 
 import lombok.Getter;
 import lombok.Setter;

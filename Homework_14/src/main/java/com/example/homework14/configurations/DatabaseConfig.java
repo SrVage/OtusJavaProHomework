@@ -1,7 +1,7 @@
-package com.example.Homework_14.configurations;
+package com.example.homework14.configurations;
 
 import jakarta.annotation.PostConstruct;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.jdbc.datasource.init.ResourceDatabasePopulator;
@@ -9,9 +9,9 @@ import org.springframework.jdbc.datasource.init.ResourceDatabasePopulator;
 import javax.sql.DataSource;
 
 @Configuration
+@RequiredArgsConstructor
 public class DatabaseConfig {
-    @Autowired
-    private DataSource dataSource;
+    private final DataSource dataSource;
 
     @PostConstruct
     public void initialize() {

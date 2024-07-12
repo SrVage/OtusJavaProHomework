@@ -1,6 +1,6 @@
-package com.example.Homework_14.controllers;
+package com.example.homework14.controllers;
 
-import com.example.Homework_14.services.CRUDService;
+import com.example.homework14.services.CRUDService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;

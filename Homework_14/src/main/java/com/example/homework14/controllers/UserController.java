@@ -1,7 +1,7 @@
-package com.example.Homework_14.controllers;
+package com.example.homework14.controllers;
 
-import com.example.Homework_14.dto.UserDto;
-import com.example.Homework_14.services.UserServiceImpl;
+import com.example.homework14.dto.UserDto;
+import com.example.homework14.services.UserServiceImpl;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;

@@ -1,8 +1,8 @@
-package com.example.Homework_14.services;
+package com.example.homework14.services;
 
-import com.example.Homework_14.dto.UserDto;
-import com.example.Homework_14.entities.User;
-import com.example.Homework_14.repositories.UserRepository;
+import com.example.homework14.dto.UserDto;
+import com.example.homework14.entities.User;
+import com.example.homework14.repositories.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -47,6 +47,9 @@ public class UserServiceImpl implements CRUDService<UserDto>{
 
     @Override
     public void deleteById(Long id) {
+        if (!userRepository.existsById(id)){
+            throw new NoSuchElementException("Пользователь не существует");
+        }
         userRepository.deleteById(id);
     }
 

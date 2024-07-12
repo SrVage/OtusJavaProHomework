@@ -1,4 +1,4 @@
-package com.example.Homework_14.entities;
+package com.example.homework14.entities;
 
 import lombok.Getter;
 import lombok.Setter;

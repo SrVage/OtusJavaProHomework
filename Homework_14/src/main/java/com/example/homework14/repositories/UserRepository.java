@@ -1,6 +1,6 @@
-package com.example.Homework_14.repositories;
+package com.example.homework14.repositories;
 
-import com.example.Homework_14.entities.User;
+import com.example.homework14.entities.User;
 import org.springframework.data.jdbc.repository.query.Query;
 import org.springframework.data.repository.CrudRepository;
 
