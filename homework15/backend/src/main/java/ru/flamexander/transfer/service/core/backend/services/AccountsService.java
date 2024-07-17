@@ -27,6 +27,10 @@ public class AccountsService {
         return accountsRepository.findByIdAndClientId(id, clientId);
     }
 
+    public Optional<Account> getAccountByAccountNumber(String accountNumber){
+        return accountsRepository.findByAccountNumber(accountNumber);
+    }
+
     public Account createNewAccount(Long clientId, CreateAccountDto createAccountDto) {
         if (createAccountDto.getInitialBalance() == null) {
             throw new AppLogicException("VALIDATION_ERROR", "Создаваемый счет не может иметь null баланс");
