@@ -12,6 +12,8 @@ import ru.flamexander.transfer.service.core.backend.errors.AppLogicException;
 import ru.flamexander.transfer.service.core.backend.repositories.TransfersRepository;
 import ru.flamexander.transfer.service.core.backend.validators.ExecuteTransferValidator;
 
+import java.util.List;
+
 @Service
 @RequiredArgsConstructor
 public class TransferService {
@@ -40,6 +42,13 @@ public class TransferService {
 
         result.setStatus("COMPLETED");
         return result;
+    }
+
+    public List<Transfer> getAllTransfers(Long clientId) {
+        var outTransfer = transfersRepository.findAllBySourceClientId(clientId);
+        var inTransfer = transfersRepository.findAllByDestinationClientId(clientId);
+        outTransfer.addAll(inTransfer);
+        return outTransfer;
     }
 
     private void checkMoneyForEnough(ExecuteTransferDtoRequest request, Account source, Transfer transfer) {

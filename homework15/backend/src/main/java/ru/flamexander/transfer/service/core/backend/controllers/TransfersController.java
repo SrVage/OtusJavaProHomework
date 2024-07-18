@@ -4,13 +4,13 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
-import ru.flamexander.transfer.service.core.api.dtos.AccountDto;
-import ru.flamexander.transfer.service.core.api.dtos.ExecuteTransferDtoRequest;
-import ru.flamexander.transfer.service.core.api.dtos.ExecuteTransferDtoResult;
+import ru.flamexander.transfer.service.core.api.dtos.*;
 import ru.flamexander.transfer.service.core.backend.entities.Account;
+import ru.flamexander.transfer.service.core.backend.entities.Transfer;
 import ru.flamexander.transfer.service.core.backend.services.TransferService;
 
 import java.util.function.Function;
+import java.util.stream.Collectors;
 
 @RestController
 @RequiredArgsConstructor
@@ -18,10 +18,19 @@ import java.util.function.Function;
 @Tag(name = "Переводы", description = "Методы переводов между счетами")
 public class TransfersController {
     private final TransferService transferService;
+    private final Function<Transfer, TransferDto> entityToDto = transfer ->
+            new TransferDto(transfer.getSourceClientNumber(), transfer.getDestinationClientNumber(),
+            transfer.getAmount(), transfer.getStatus().toString(), transfer.getUpdatedAt());
 
     @PostMapping("/execute")
     @Operation(summary = "Выполнение перевода между счетами")
     public ExecuteTransferDtoResult executeTransfer(@RequestBody ExecuteTransferDtoRequest request) {
         return transferService.transfer(request);
+    }
+
+    @Operation(summary = "Получение информации о всех переводах пользователя")
+    @GetMapping
+    public TransfersPageDto getAllAccounts(@RequestHeader Long clientId) {
+        return new TransfersPageDto(transferService.getAllTransfers(clientId).stream().map(entityToDto).collect(Collectors.toList()));
     }
 }

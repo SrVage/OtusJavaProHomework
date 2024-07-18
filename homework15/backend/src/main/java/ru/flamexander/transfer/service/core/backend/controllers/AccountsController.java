@@ -28,7 +28,7 @@ import java.util.stream.Collectors;
 public class AccountsController {
     private final AccountsService accountsService;
 
-    private Function<Account, AccountDto> entityToDto = account -> new AccountDto(account.getId(), account.getAccountNumber(), account.getClientId(), account.getBalance());
+    private final Function<Account, AccountDto> entityToDto = account -> new AccountDto(account.getId(), account.getAccountNumber(), account.getClientId(), account.getBalance());
 
     @GetMapping("/{id}")
     public AccountDto getAccountDetails(@RequestHeader Long clientId, @PathVariable Long id) {
