@@ -1,16 +1,16 @@
 package ru.flamexander.transfer.service.core.api.dtos;
 
 import io.swagger.v3.oas.annotations.media.Schema;
-import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.math.BigDecimal;
 
-@AllArgsConstructor
+@NoArgsConstructor
 @Data
 @Schema(description = "ДТО запроса выполнения перевода")
 public class ExecuteTransferDtoRequest {
-    private final String sourceAccount;
-    private final String destinationAccount;
-    private final BigDecimal transferAmount;
+    private String sourceAccount;
+    private String destinationAccount;
+    private BigDecimal transferAmount;
 }

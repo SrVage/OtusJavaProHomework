@@ -16,6 +16,7 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class AccountsService {
     private final AccountsRepository accountsRepository;
+    private final NumberGeneratorService numberGeneratorService;
 
     private static final Logger logger = LoggerFactory.getLogger(AccountsService.class.getName());
 
@@ -36,6 +37,7 @@ public class AccountsService {
             throw new AppLogicException("VALIDATION_ERROR", "Создаваемый счет не может иметь null баланс");
         }
         Account account = new Account(clientId, createAccountDto.getInitialBalance());
+        account.setAccountNumber(numberGeneratorService.generateNumber());
         account = accountsRepository.save(account);
         logger.info("Account id = {} created from {}", account.getId(), createAccountDto);
         return account;
