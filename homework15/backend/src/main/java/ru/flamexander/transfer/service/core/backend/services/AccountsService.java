@@ -9,6 +9,7 @@ import ru.flamexander.transfer.service.core.backend.entities.Account;
 import ru.flamexander.transfer.service.core.backend.errors.AppLogicException;
 import ru.flamexander.transfer.service.core.backend.repositories.AccountsRepository;
 
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.Optional;
 
@@ -18,7 +19,7 @@ public class AccountsService {
     private final AccountsRepository accountsRepository;
     private final NumberGeneratorService numberGeneratorService;
 
-    private static final Logger logger = LoggerFactory.getLogger(AccountsService.class.getName());
+    private static final Logger logger = LoggerFactory.getLogger(AccountsService.class);
 
     public List<Account> getAllAccounts(Long clientId) {
         return accountsRepository.findAllByClientId(clientId);
@@ -33,9 +34,9 @@ public class AccountsService {
     }
 
     public Account createNewAccount(Long clientId, CreateAccountDto createAccountDto) {
-        if (createAccountDto.getInitialBalance() == null) {
-            throw new AppLogicException("VALIDATION_ERROR", "Создаваемый счет не может иметь null баланс");
-        }
+        BigDecimal initialBalance = Optional.ofNullable(createAccountDto.getInitialBalance())
+                .orElseThrow(() -> new AppLogicException("VALIDATION_ERROR", "Создаваемый счет не может иметь null баланс"));
+
         Account account = new Account(clientId, createAccountDto.getInitialBalance());
         account.setAccountNumber(numberGeneratorService.generateNumber());
         account = accountsRepository.save(account);

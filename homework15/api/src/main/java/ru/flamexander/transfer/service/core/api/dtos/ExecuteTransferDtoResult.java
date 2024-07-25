@@ -23,6 +23,6 @@ public class ExecuteTransferDtoResult {
         this.sourceAccount = sourceAccount;
         this.destinationAccount = destinationAccount;
         this.transferAmount = transferAmount;
-        dateTime = LocalDateTime.now();
+        this.dateTime = LocalDateTime.now();
     }
 }

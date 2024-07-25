@@ -16,12 +16,12 @@ public class AccountDto {
     @Schema(description = "Внутренний ID счета", required = true)
     private Long id;
 
-    @Schema(description = "Номер счета", required = true, minLength = 16, maxLength = 16, example = "1234123412341234")
+    @Schema(description = "Номер счета", required = true, pattern = "\\d{16}", example = "1234123412341234")
     private String accountNumber;
 
     @Schema(description = "ID клиента владельца", required = true)
     private Long clientId;
 
-    @Schema(description = "Баланс на счету", required = true, example = "1000.99")
+    @Schema(description = "Баланс на счету", required = true, minimum = "0", example = "1000.99")
     private BigDecimal balance;
 }

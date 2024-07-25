@@ -7,21 +7,20 @@ import ru.flamexander.transfer.service.core.backend.repositories.AccountsReposit
 @RequiredArgsConstructor
 @Service
 public class NumberGeneratorService {
+    private static final int ACCOUNT_NUMBER_LENGTH = 16;
     private final AccountsRepository accountsRepository;
 
     public String generateNumber(){
-        long generated = (long)(Math.random()*10000000000000000L);
-        String number = String.valueOf(generated);
-
-        if (number.length() != 16){
-            return generateNumber();
+        String number;
+        do{
+            long generated = getGeneratedNumber();
+            number = String.valueOf(generated);
         }
-
-        var checkAccount = accountsRepository.findByAccountNumber(number);
-        if (checkAccount.isPresent()){
-            return generateNumber();
-        }
-
+        while(number.length() != ACCOUNT_NUMBER_LENGTH || accountsRepository.findByAccountNumber(number).isPresent());
         return number;
+    }
+
+    private static long getGeneratedNumber() {
+        return (long) (Math.random() * 10000000000000000L);
     }
 }

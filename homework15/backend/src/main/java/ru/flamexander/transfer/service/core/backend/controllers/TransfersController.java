@@ -5,7 +5,6 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 import ru.flamexander.transfer.service.core.api.dtos.*;
-import ru.flamexander.transfer.service.core.backend.entities.Account;
 import ru.flamexander.transfer.service.core.backend.entities.Transfer;
 import ru.flamexander.transfer.service.core.backend.services.TransferService;
 
@@ -30,7 +29,7 @@ public class TransfersController {
 
     @Operation(summary = "Получение информации о всех переводах пользователя")
     @GetMapping
-    public TransfersPageDto getAllAccounts(@RequestHeader Long clientId) {
+    public TransfersPageDto getAllTransfers(@RequestHeader Long clientId) {
         return new TransfersPageDto(transferService.getAllTransfers(clientId).stream().map(entityToDto).collect(Collectors.toList()));
     }
 }

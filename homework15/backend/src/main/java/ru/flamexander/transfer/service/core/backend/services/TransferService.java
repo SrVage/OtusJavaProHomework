@@ -29,40 +29,28 @@ public class TransferService {
         
         Account source = accountsService.getAccountByAccountNumber(request.getSourceAccount()).orElseThrow(() -> new AppLogicException("TRANSFER_SOURCE_ACCOUNT_NOT_FOUND", "Перевод невозможен поскольку не существует счет отправителя"));
         Account target = accountsService.getAccountByAccountNumber(request.getDestinationAccount()).orElseThrow(() -> new AppLogicException("TRANSFER_TARGET_ACCOUNT_NOT_FOUND", "Перевод невозможен поскольку не существует счет получателя"));
-        
+
+        checkMoneyForEnough(request, source);
+
         var transfer = new Transfer(source.getClientId(), source.getAccountNumber(),
                 target.getClientId(), target.getAccountNumber(), request.getTransferAmount());
         transfersRepository.save(transfer);
 
-        checkMoneyForEnough(request, source, transfer);
+        source.setBalance(source.getBalance().subtract(request.getTransferAmount()));
+        target.setBalance(target.getBalance().add(request.getTransferAmount()));
+        setTransferStatus(transfer, Status.COMPLETED);
 
-        setTransferStatus(transfer, Status.IN_PROGRESS);
-
-        executeTransfer(request, source, target, transfer);
-
-        result.setStatus("COMPLETED");
         return result;
     }
 
     public List<Transfer> getAllTransfers(Long clientId) {
-        var outTransfer = transfersRepository.findAllBySourceClientId(clientId);
-        var inTransfer = transfersRepository.findAllByDestinationClientId(clientId);
-        outTransfer.addAll(inTransfer);
-        return outTransfer;
+        return transfersRepository.findAllBySourceOrDestinationClientId(clientId);
     }
 
-    private void checkMoneyForEnough(ExecuteTransferDtoRequest request, Account source, Transfer transfer) {
+    private void checkMoneyForEnough(ExecuteTransferDtoRequest request, Account source) {
         if (source.getBalance().compareTo(request.getTransferAmount()) < 0){
-            setTransferStatus(transfer, Status.ERROR);
             throw new AppLogicException("NOT_ENOUGH_MONEY", "Перевод невозможен поскольку у отправителя недостаточно средств");
         }
-    }
-
-    private void executeTransfer(ExecuteTransferDtoRequest request, Account source, Account target, Transfer transfer) {
-        source.setBalance(source.getBalance().subtract(request.getTransferAmount()));
-        target.setBalance(target.getBalance().add(request.getTransferAmount()));
-
-        setTransferStatus(transfer, Status.COMPLETED);
     }
 
     private void setTransferStatus(Transfer transfer, Status status){
