@@ -18,10 +18,12 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Objects;
+import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
 @Service
 public class ConvertService {
+    private final Logger logger = Logger.getLogger(ConvertService.class.getName());
     private final ObjectMapper jsonMapper;
     private final static String FILE_NAME = "chats.json";
 
@@ -72,7 +74,7 @@ public class ConvertService {
         try {
             jsonMapper.writeValue(new File(FILE_NAME), chatList);
         } catch (IOException e) {
-            e.printStackTrace();
+            logger.warning(e.getStackTrace().toString());
         }
     }
 
@@ -81,8 +83,7 @@ public class ConvertService {
             return jsonMapper.readValue(new File(FILE_NAME),
                     jsonMapper.getTypeFactory().constructCollectionType(List.class, ChatSession.class));
         } catch (IOException e) {
-            e.printStackTrace();
-            return new ArrayList<>();
+            throw new RuntimeException("Ошибка чтения файла: " + FILE_NAME, e);
         }
     }
 

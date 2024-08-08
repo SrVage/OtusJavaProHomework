@@ -18,7 +18,7 @@ public class ChatSessionDto {
     private String chatIdentifier;
 
     @JsonProperty("display_name")
-    private String display_name;
+    private String displayName;
 
     @JsonProperty("is_deleted")
     private Boolean isDeleted;
